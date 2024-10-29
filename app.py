@@ -84,18 +84,15 @@ def add_book():
     return jsonify({'message': 'Book added!', 'data': data})
 
 def allowed_file(filename):
-    """Check if the file has an allowed extension."""
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @app.route('/upload')
 def upload():
-    """Render the upload form."""
     return render_template('upload.html')
 
 @app.route('/upload-file', methods=['POST'])
 @protected_route
 def upload_file():
-    """Handle the file upload."""
     # Check if the post request has the file part
     if 'file' not in request.files:
         flash("No file part", "error")
@@ -103,14 +100,12 @@ def upload_file():
     
     file = request.files['file']
 
-    # If the user does not select a file
     if file.filename == '':
         flash("No selected file", "error")
         return redirect(url_for('upload'))
 
     if file and allowed_file(file.filename):
 
-        # Save the file securely
         filename = file.filename
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         flash("File uploaded successfully!", "success")
